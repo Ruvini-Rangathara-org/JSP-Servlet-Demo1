@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CustomerController {
     public boolean saveCustomer(Customer customer){
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try(Session session = HibernateUtil.getSession()){
             Transaction transaction = session.beginTransaction();
 
             session.save(customer);
@@ -20,7 +20,7 @@ public class CustomerController {
     }
 
     public boolean updateCustomer(Customer customer){
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try(Session session = HibernateUtil.getSession()){
             Transaction transaction = session.beginTransaction();
             Customer selectedCustomer = session.get(Customer.class, customer.getId());
             if(selectedCustomer == null) return false;
@@ -35,7 +35,7 @@ public class CustomerController {
     }
 
     public boolean deleteCustomer(long id){
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try(Session session = HibernateUtil.getSession()){
             Transaction transaction = session.beginTransaction();
             Customer selectedCustomer = session.get(Customer.class, id);
 
@@ -49,13 +49,13 @@ public class CustomerController {
     }
 
     public Customer findCustomer(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSession()) {
             return session.get(Customer.class, id);
         }
     }
 
         public List<Customer> findAllCustomers () {
-            try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            try(Session session = HibernateUtil.getSession()) {
                 return session.createQuery("FROM customer", Customer.class).list();
             }
         }

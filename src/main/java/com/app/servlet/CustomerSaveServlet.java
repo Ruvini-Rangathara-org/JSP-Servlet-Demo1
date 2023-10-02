@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/update")
-public class UpdateCustomerServlet extends HttpServlet {
-
+@WebServlet("/save")
+public class CustomerSaveServlet extends HttpServlet {
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         String name = req.getParameter("name");
         String address = req.getParameter("address");
@@ -22,13 +21,12 @@ public class UpdateCustomerServlet extends HttpServlet {
 
         Customer customer = new Customer(Long.parseLong(id), name, address, Double.parseDouble(salary));
 
-        if(new CustomerController().updateCustomer(customer)){
-            System.out.println("Updated!");
-            resp.sendRedirect("index .jsp");
-        }else{
+        if (new CustomerController().saveCustomer(customer)) {
+            System.out.println("saved!");
+            resp.sendRedirect("new_customer.jsp");
+        } else {
             System.out.println("error!");
         }
-
-
     }
+
 }

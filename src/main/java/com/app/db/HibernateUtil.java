@@ -1,6 +1,8 @@
 package com.app.db;
 
+
 import com.app.entity.Customer;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -11,40 +13,30 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import java.util.Properties;
 
 public class HibernateUtil {
-
-    // Create a static SessionFactory variable to hold the Hibernate SessionFactory.
-    private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
-
-    // A private method to build the Hibernate SessionFactory.
-    private static SessionFactory buildSessionFactory() {
-        // Create a Properties object to load Hibernate properties.
+    private static final SessionFactory SESSION_FACTORY=buildSessionFactory();
+    private static SessionFactory buildSessionFactory(){
         Properties properties = new Properties();
-
-        try {
-            // Load Hibernate properties from a file named "hibernate.properties" on the classpath.
-            properties.load(HibernateUtil.class.getClassLoader().getResourceAsStream("hibernate.properties"));
-        } catch (Exception e) {
+        try{
+            properties.load(HibernateUtil.class.getClassLoader()
+                    .getResourceAsStream("hibernate.properties"));
+        }catch (Exception e){
             e.printStackTrace();
         }
-
-        // Create a StandardServiceRegistry to configure Hibernate settings.
-        StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
+        StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(properties)
                 .build();
 
-        // Create MetadataSources and build Metadata with a JPA-compliant naming strategy.
-        Metadata metadata = new MetadataSources(standardServiceRegistry)
+        Metadata metadata = new MetadataSources(standardRegistry)
                 .addAnnotatedClass(Customer.class)
                 .getMetadataBuilder()
                 .applyImplicitNamingStrategy(ImplicitNamingStrategyJpaCompliantImpl.INSTANCE)
                 .build();
 
-        // Build and return the SessionFactory.
-        return metadata.getSessionFactoryBuilder().build();
+        return metadata.getSessionFactoryBuilder()
+                .build();
     }
 
-    // Getter method to access the SessionFactory.
-    public static SessionFactory getSessionFactory() {
-        return SESSION_FACTORY;
+    public static Session getSession(){
+        return SESSION_FACTORY.openSession();
     }
 }
