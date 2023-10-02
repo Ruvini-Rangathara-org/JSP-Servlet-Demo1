@@ -1,5 +1,6 @@
 package com.app.db;
 
+import com.app.entity.Customer;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -33,6 +34,7 @@ public class HibernateUtil {
 
         // Create MetadataSources and build Metadata with a JPA-compliant naming strategy.
         Metadata metadata = new MetadataSources(standardServiceRegistry)
+                .addAnnotatedClass(Customer.class)
                 .getMetadataBuilder()
                 .applyImplicitNamingStrategy(ImplicitNamingStrategyJpaCompliantImpl.INSTANCE)
                 .build();
