@@ -1,31 +1,64 @@
 package com.app.controller;
 
+import com.app.db.HibernateUtil;
 import com.app.entity.Customer;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class CustomerController {
     public boolean saveCustomer(Customer customer){
-        return false;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+
+            session.save(customer);
+            transaction.commit();
+        }
+
+        return true;
     }
 
     public boolean updateCustomer(Customer customer){
-        return false;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            Customer selectedCustomer = session.get(Customer.class, customer.getId());
+            if(selectedCustomer == null) return false;
+            selectedCustomer.setName(customer.getName());
+            selectedCustomer.setAddress(customer.getAddress());
+            selectedCustomer.setSalary(customer.getSalary());
+
+            transaction.commit();
+        }
+
+        return true;
     }
 
     public boolean deleteCustomer(long id){
-        return false;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            Customer selectedCustomer = session.get(Customer.class, id);
+
+            if(selectedCustomer==null)return false;
+
+            session.delete(selectedCustomer);
+            transaction.commit();
+        }
+
+        return true;
     }
 
-    public Customer findCustomer(long id){
-        return null;
+    public Customer findCustomer(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Customer.class, id);
+        }
     }
 
-    public List<Customer> findAllCustomers(){
-        return null;
-    }
-
-
+        public List<Customer> findAllCustomers () {
+            try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+                return session.createQuery("FROM customer", Customer.class).list();
+            }
+        }
 
 
 }
