@@ -15,7 +15,6 @@ public class CustomerController {
             session.save(customer);
             transaction.commit();
         }
-
         return true;
     }
 
@@ -30,7 +29,6 @@ public class CustomerController {
 
             transaction.commit();
         }
-
         return true;
     }
 
